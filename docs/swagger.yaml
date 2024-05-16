@@ -1,0 +1,221 @@
+basePath: /
+definitions:
+  apidto.DepartmentDTO:
+    properties:
+      name:
+        type: string
+      phone:
+        type: string
+    type: object
+  apidto.EmployerDTO:
+    properties:
+      company_id:
+        type: integer
+      department:
+        $ref: '#/definitions/apidto.DepartmentDTO'
+      id:
+        type: integer
+      name:
+        type: string
+      passport:
+        $ref: '#/definitions/apidto.PassportDTO'
+      phone:
+        type: string
+      surname:
+        type: string
+    type: object
+  apidto.PassportDTO:
+    properties:
+      number:
+        type: string
+      type:
+        type: string
+    type: object
+  requests.CreateEmployer:
+    properties:
+      company_id:
+        type: integer
+      department:
+        $ref: '#/definitions/apidto.DepartmentDTO'
+      name:
+        type: string
+      passport:
+        $ref: '#/definitions/apidto.PassportDTO'
+      phone:
+        type: string
+      surname:
+        type: string
+    required:
+    - company_id
+    - department
+    - name
+    - passport
+    - phone
+    - surname
+    type: object
+  requests.UpdateEmployer:
+    properties:
+      company_id:
+        type: integer
+      department_name:
+        type: string
+      department_phone:
+        type: string
+      name:
+        type: string
+      passport_number:
+        type: string
+      passport_type:
+        type: string
+      phone:
+        type: string
+      surname:
+        type: string
+    type: object
+  responses.CreateEmployer:
+    properties:
+      id:
+        type: integer
+    type: object
+  responses.DeleteEmployer:
+    properties:
+      message:
+        type: string
+    type: object
+  responses.GetEmployers:
+    properties:
+      employers:
+        items:
+          $ref: '#/definitions/apidto.EmployerDTO'
+        type: array
+    type: object
+  responses.UpdateEmployer:
+    properties:
+      employer:
+        $ref: '#/definitions/apidto.EmployerDTO'
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Web-server for employers
+  title: Employers service
+  version: 0.0.1
+paths:
+  /employers:
+    post:
+      consumes:
+      - application/json
+      description: Данный роут создает сотрудника и возвращает его идентификатор в
+        ответе
+      operationId: create_employer
+      parameters:
+      - description: Модель сотрудника
+        in: body
+        name: '{object}'
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateEmployer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сотрудник создан
+          schema:
+            $ref: '#/definitions/responses.CreateEmployer'
+      summary: Create employer
+      tags:
+      - Employers
+  /employers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Данный удаляе сотрудника
+      operationId: delete_employer
+      parameters:
+      - description: ID сотрудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сотрудник удален
+          schema:
+            $ref: '#/definitions/responses.DeleteEmployer'
+      summary: Delete employer
+      tags:
+      - Employers
+    patch:
+      consumes:
+      - application/json
+      description: Данный роут позволяет изменить данные сотрудника
+      operationId: update_employer_by_id
+      parameters:
+      - description: Ид сторудника
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Модель сотрудника
+        in: body
+        name: '{object}'
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateEmployer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Измененная мрдель сотрудника
+          schema:
+            $ref: '#/definitions/responses.UpdateEmployer'
+      summary: Update employer by id
+      tags:
+      - Employers
+  /employers/company/{companyId}:
+    get:
+      consumes:
+      - application/json
+      description: Данный роут позволяет получить список сотрудников по ИД компании
+      operationId: get_employer_by_company_id
+      parameters:
+      - description: ID компании
+        in: path
+        name: companyId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список сотрудников
+          schema:
+            $ref: '#/definitions/responses.GetEmployers'
+      summary: Get employers by companyID
+      tags:
+      - Employers
+  /employers/department/{name}:
+    get:
+      consumes:
+      - application/json
+      description: Данный роут позволяет получить список сотрудников по названию отдела
+      operationId: get_employer_by_department_name
+      parameters:
+      - description: Название отдела
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список сотрудников
+          schema:
+            $ref: '#/definitions/responses.GetEmployers'
+      summary: Get employers by department name
+      tags:
+      - Employers
+swagger: "2.0"
