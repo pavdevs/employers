@@ -114,7 +114,7 @@ func (e *EmployerRepository) GetEmployeesByDepartment(name string) ([]repository
 		return nil, fmt.Errorf("can't connect to database: %w", err)
 	}
 
-	q := `SELECT * FROM employers WHERE department_name LIKE $1`
+	q := `SELECT * FROM employers WHERE department_name LIKE '%' || $1 || '%'`
 
 	rows, err := db.Query(q, name)
 
@@ -134,8 +134,6 @@ func (e *EmployerRepository) GetEmployeesByDepartment(name string) ([]repository
 			e.logger.Error(err)
 			return nil, fmt.Errorf("can't get employees: %w", err)
 		}
-
-		emps = append(emps, emr)
 
 		emps = append(emps, emr)
 	}
