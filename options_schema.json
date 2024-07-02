@@ -13,7 +13,6 @@
             "enum": ["database", "databaseStdlib"]
           }
         },
-        "required": ["cmd"],
         "additionalProperties": false
       }
     }
